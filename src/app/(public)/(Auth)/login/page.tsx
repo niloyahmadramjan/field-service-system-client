@@ -41,9 +41,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <p className="text-center text-xs text-muted-foreground lg:text-left">
-          © {new Date().getFullYear()} Field Service Management System
-        </p>
+       
       </section>
 
       {/* Image Section */}

@@ -1,4 +1,4 @@
-
+import RegisterForm from "@/components/auth/Register-form";
 import Logo from "@/components/home/logo/Logo";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,7 +19,7 @@ export default function RegisterPage() {
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10" />
 
-         <Logo/>
+        <Logo />
 
         <div className="absolute inset-x-0 bottom-0 p-8 sm:p-12 xl:p-16">
           <p className="mb-4 text-sm font-medium text-white/70">
@@ -29,8 +29,8 @@ export default function RegisterPage() {
             Bring your entire field team together.
           </h2>
           <p className="mt-5 max-w-md text-sm leading-7 text-white/80 sm:text-base">
-            Organize service requests, schedule visits, and keep
-            every job moving forward.
+            Organize service requests, schedule visits, and keep every job
+            moving forward.
           </p>
         </div>
       </aside>
@@ -59,12 +59,12 @@ export default function RegisterPage() {
                 Create your account
               </h1>
               <p className="text-sm leading-6 text-muted-foreground">
-                Join the platform to manage your field service
-                operations more efficiently.
+                Join the platform to manage your field service operations more
+                efficiently.
               </p>
             </div>
 
-            {/* <RegisterForm /> */}
+            <RegisterForm />
 
             <p className="mt-8 text-center text-xs leading-5 text-muted-foreground">
               By creating an account, you agree to our{" "}
@@ -72,20 +72,13 @@ export default function RegisterPage() {
                 Terms of Service
               </Link>{" "}
               and{" "}
-              <Link
-                href="/privacy"
-                className="underline underline-offset-4"
-              >
+              <Link href="/privacy" className="underline underline-offset-4">
                 Privacy Policy
               </Link>
               .
             </p>
           </div>
         </div>
-
-        <p className="text-center text-xs text-muted-foreground lg:text-left">
-          © {new Date().getFullYear()} Field Service Management System
-        </p>
       </section>
     </main>
   );
