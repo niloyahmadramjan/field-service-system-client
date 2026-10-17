@@ -7,7 +7,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { toast } from "../ui/toast";
 import { useRouter } from "next/navigation";
-import { useLogin } from "@/hooks/auth.hook";
+import { useRegister } from "@/hooks/auth.hook";
 import { Eye, EyeOffIcon } from "lucide-react";
 import { registerSchema } from "@/validation/auth.validation";
 
@@ -15,7 +15,7 @@ export default function RegisterForm() {
   const [showPassword, setPassword] = useState(false);
   const router = useRouter();
 
-  const { mutate: login, isPending: loginPedding } = useLogin();
+  const { mutate: register, isPending: registerPedding } = useRegister();
 
   const form = useForm({
     defaultValues: {
@@ -30,11 +30,13 @@ export default function RegisterForm() {
     },
     onSubmit: ({ value }) => {
       // console.log(data);
-      const loginData = {
+      const registerData = {
+        name: value.name,
+        phone: value.phone,
         email: value.email,
         password: value.password,
       };
-      login(loginData, {
+      register(registerData, {
         onSuccess: (res) => {
           toast.add({
             title: "successfully login",
