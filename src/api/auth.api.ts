@@ -16,3 +16,13 @@ export function authRegister(payload: IRegiserPayload){
         body: payload
     })
 }
+
+export function getMe(){
+    return apiClient("/auth/me", {
+        method: "GET"
+    })
+}
+
+export function authLogout (){
+    return apiClient("/auth/logout")
+}

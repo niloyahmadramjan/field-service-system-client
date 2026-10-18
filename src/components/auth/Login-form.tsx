@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 import { toast } from "../ui/toast";
 import { useRouter } from "next/navigation";
 import { useLogin } from "@/hooks/auth.hook";
-import { Eye, EyeOffIcon } from "lucide-react";
+import { Eye, EyeOffIcon, Loader } from "lucide-react";
 import { loginSchema } from "@/validation/auth.validation";
 
 export default function LoginForm() {
@@ -122,8 +122,15 @@ export default function LoginForm() {
         </form.Field>
       </FieldGroup>
 
-      <Button type="submit" className="w-full">
-        Login
+      <Button type="submit" className="w-full" disabled={loginPedding}>
+        {loginPedding ? (
+          <>
+            <Loader className="mr-2 size-4 animate-spin" />
+            Logging in...
+          </>
+        ) : (
+          "Login"
+        )}
       </Button>
     </form>
   );
