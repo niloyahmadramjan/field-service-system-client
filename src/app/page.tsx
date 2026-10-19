@@ -13,7 +13,7 @@ import Footer from "@/components/home/footer/footer";
 export default function HomePage() {
   return (
     <>
-      <HeaderSection />
+      {/* <HeaderSection /> */}
 
       <main className="flex-1">
         <HeroSection />
@@ -27,7 +27,7 @@ export default function HomePage() {
         <CtaSection />
       </main>
 
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

@@ -22,7 +22,7 @@ import { Loader, Menu } from "lucide-react";
 
 const routes = [
   { name: "Home", url: "/" },
-  { name: "Services", url: "/#services" },
+  { name: "Services", url: "/services" },
   { name: "How it works", url: "/#how-it-works" },
   { name: "For every role", url: "/#roles" },
   { name: "FAQ", url: "/#faq" },
