@@ -11,6 +11,29 @@ import { useLogin } from "@/hooks/auth.hook";
 import { Eye, EyeOffIcon, Loader } from "lucide-react";
 import { loginSchema } from "@/validation/auth.validation";
 
+const demoCredentials = [
+  {
+    role: "Admin",
+    email: "admin@fieldservice.com",
+    password: "Admin@123",
+  },
+  {
+    role: "Manager",
+    email: "manager@fieldservice.com",
+    password: "Manager@123",
+  },
+  {
+    role: "Technician",
+    email: "technician@fieldservice.com",
+    password: "Technician@123",
+  },
+  {
+    role: "Customer",
+    email: "customer@fieldservice.com",
+    password: "Customer@123",
+  },
+];
+
 export default function LoginForm() {
   const [showPassword, setPassword] = useState(false);
   const router = useRouter();
@@ -26,19 +49,17 @@ export default function LoginForm() {
       onSubmit: loginSchema,
     },
     onSubmit: ({ value }) => {
-      // console.log(data);
       const loginData = {
         email: value.email,
         password: value.password,
       };
       login(loginData, {
-        onSuccess: (res) => {
+        onSuccess: () => {
           toast.add({
             title: "successfully login",
             description: "Welcome back",
             type: "success",
           });
-          // console.log(res);
           router.push("/");
         },
         onError: (err) => {
@@ -52,6 +73,33 @@ export default function LoginForm() {
       });
     },
   });
+
+  const handleDemoLogin = (credential: (typeof demoCredentials)[number]) => {
+    login(
+      {
+        email: credential.email,
+        password: credential.password,
+      },
+      {
+        onSuccess: () => {
+          toast.add({
+            title: "Successfully logged in",
+            description: `Welcome back, ${credential.role}`,
+            type: "success",
+          });
+          router.push("/");
+        },
+        onError: (err) => {
+          toast.add({
+            title: "Authorization failure",
+            description: err.message || "Something went wrong",
+            type: "error",
+          });
+          console.log(err);
+        },
+      },
+    );
+  };
 
   return (
     <form
@@ -132,6 +180,39 @@ export default function LoginForm() {
           "Login"
         )}
       </Button>
+
+      <div className="space-y-3">
+        <div className="relative flex items-center justify-center">
+          <div className="absolute inset-x-0 border-b" />
+          <span className="relative bg-background px-3 text-xs text-muted-foreground">
+            Or try demo credentials
+          </span>
+        </div>
+
+        <div className="grid gap-2 sm:grid-cols-2">
+          {demoCredentials.map((credential) => (
+            <Button
+              key={credential.role}
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => handleDemoLogin(credential)}
+              disabled={loginPedding}
+              className="justify-between px-3"
+            >
+              <span>{credential.role}</span>
+              <span className="hidden text-[10px] text-muted-foreground/75 sm:block">
+                {credential.email}
+              </span>
+            </Button>
+          ))}
+        </div>
+
+        <p className="text-center text-[11px] leading-5 text-muted-foreground">
+          Demo accounts are for testing only — use any of the above to sign in
+          instantly.
+        </p>
+      </div>
     </form>
   );
 }

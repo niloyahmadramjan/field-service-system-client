@@ -1,16 +1,33 @@
-"use client"
-import HeaderSection from '@/components/home/public/header'
-import { useGetMe } from '@/hooks/auth.hook'
-import React from 'react'
+import HeaderSection from "@/components/home/public/header";
+import HeroSection from "@/components/home/sections/hero";
+import StatsSection from "@/components/home/sections/stats";
+import ServicesSection from "@/components/home/sections/services";
+import HowItWorksSection from "@/components/home/sections/how-it-works";
+import RolesSection from "@/components/home/sections/roles";
+import FeaturesSection from "@/components/home/sections/features";
+import TestimonialsSection from "@/components/home/sections/testimonials";
+import FaqSection from "@/components/home/sections/faq";
+import CtaSection from "@/components/home/sections/cta";
+import Footer from "@/components/home/footer/footer";
 
-function home() {
-  const {data, isLoading} = useGetMe()
-  console.log(data?.data)
+export default function HomePage() {
   return (
-    <div>
-      <HeaderSection/>
-    </div>
-  )
-}
+    <>
+      <HeaderSection />
 
-export default home
+      <main className="flex-1">
+        <HeroSection />
+        <StatsSection />
+        <ServicesSection />
+        <HowItWorksSection />
+        <RolesSection />
+        <FeaturesSection />
+        <TestimonialsSection />
+        <FaqSection />
+        <CtaSection />
+      </main>
+
+      <Footer />
+    </>
+  );
+}
