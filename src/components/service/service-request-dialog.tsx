@@ -132,8 +132,8 @@ export function ServiceRequestDialog({ service }: { service: Service }) {
                 </p>
               ) : (
                 <div className="flex gap-3">
-                  <Button render={<Link href="/login" />}>Sign in</Button>
-                  <Button variant="outline" render={<Link href="/register" />}>
+                  <Button render={<Link href="/login" />} nativeButton={false}>Sign in</Button>
+                  <Button variant="outline" render={<Link href="/register" />} nativeButton={false}>
                     Create account
                   </Button>
                 </div>

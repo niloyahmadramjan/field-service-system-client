@@ -21,6 +21,29 @@ export interface IUser {
   avatarUrl: string | null;
 }
 
+export interface ICustomerProfile {
+  id: string;
+  userId: string;
+  address: string;
+  city: string;
+  district: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IUserProfile extends IUser {
+  lastLoginAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  customer: ICustomerProfile | null;
+  technician: unknown | null;
+}
+
+export interface IUpdateProfilePayload {
+  name: string;
+  phone: string;
+}
+
 export interface IAuthResponse {
   accessToken: string;
   refreshToken: string;

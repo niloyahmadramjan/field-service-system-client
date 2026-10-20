@@ -1,5 +1,5 @@
 import { getService, getServices, requestService } from "@/api/service.api";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const serviceKeys = {
   all: ["services"] as const,
@@ -23,8 +23,15 @@ export function useService(serviceId: string) {
 }
 
 export function useRequestService() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ serviceId, payload }: { serviceId: string; payload: Parameters<typeof requestService>[1] }) =>
       requestService(serviceId, payload),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["customer", "dashboard"] }),
+        queryClient.invalidateQueries({ queryKey: ["customer", "requests"] }),
+      ]);
+    },
   });
 }

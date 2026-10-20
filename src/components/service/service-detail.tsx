@@ -39,7 +39,7 @@ export function ServiceDetail() {
             >
               <RefreshCw className="size-4" /> Retry
             </Button>
-            <Button render={<Link href="/services" />}>All services</Button>
+            <Button render={<Link href="/services" />} nativeButton={false}>All services</Button>
           </div>
         </Card>
       </main>
@@ -54,6 +54,7 @@ export function ServiceDetail() {
           variant="ghost"
           className="mb-6"
           render={<Link href="/services" />}
+          nativeButton={false}
         >
           <ArrowLeft /> All services
         </Button>

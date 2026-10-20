@@ -1,5 +1,5 @@
 import apiClient from "@/lib/apiClient";
-import { IRegiserPayload } from "@/types/auth.types";
+import type { IApiResponse, IRegiserPayload, IUpdateProfilePayload, IUserProfile } from "@/types/auth.types";
 
 
 export function authLogin(payload: {email: string, password: string}){
@@ -18,9 +18,16 @@ export function authRegister(payload: IRegiserPayload){
 }
 
 export function getMe(){
-    return apiClient("/auth/me", {
+    return apiClient<IApiResponse<IUserProfile>>("/auth/me", {
         method: "GET"
     })
+}
+
+export function updateMe(payload: IUpdateProfilePayload) {
+    return apiClient<IApiResponse<IUserProfile>>("/api/v1/users/me", {
+        method: "PATCH",
+        body: payload,
+    });
 }
 
 export function authLogout (){

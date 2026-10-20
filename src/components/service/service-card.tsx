@@ -25,7 +25,7 @@ export function ServiceCard({ service }: { service: Service }) {
       </CardContent>
       <CardFooter className="flex justify-between gap-3 border-t bg-muted/30">
         <span className="flex items-center gap-1.5 text-xs text-muted-foreground"><CalendarDays className="size-3.5" /> Professional service</span>
-        <Button size="sm" disabled={!service.isActive} render={<Link href={`/services/${service.id}`} />}>
+        <Button size="sm" disabled={!service.isActive} render={<Link href={`/services/${service.id}`} />} nativeButton={false}>
           View details <ArrowRight data-icon="inline-end" />
         </Button>
       </CardFooter>
