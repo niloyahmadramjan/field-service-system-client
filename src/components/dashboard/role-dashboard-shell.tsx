@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 
 const navigation = {
   admin: [
-    { label: "Overview", path: "dashboard", icon: LayoutDashboard },
+    { label: "Overview", path: "", icon: LayoutDashboard },
     { label: "Users", path: "users", icon: Users },
     { label: "Services", path: "services", icon: Wrench },
     { label: "Service requests", path: "requests", icon: ClipboardList },

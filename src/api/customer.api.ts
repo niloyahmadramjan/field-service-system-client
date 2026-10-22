@@ -57,15 +57,9 @@ export const getMyVisits = () =>
     listOptions,
   );
 export const getMyInvoices = () =>
-  apiClient<CustomerListResponse<CustomerInvoice>>(
-    "/invoices/",
-    listOptions,
-  );
+  apiClient<CustomerListResponse<CustomerInvoice>>("/invoices/", listOptions);
 export const getMyPayments = () =>
-  apiClient<CustomerListResponse<CustomerPayment>>(
-    "/payments/my",
-    listOptions,
-  );
+  apiClient<CustomerListResponse<CustomerPayment>>("/payments/my", listOptions);
 export const getCustomerProfile = () =>
   apiClient<CustomerProfileResponse>("/customer/get");
 export const updateCustomerProfile = (payload: CustomerProfileUpdate) =>
@@ -79,10 +73,7 @@ export const startInvoicePayment = (invoiceId: string) =>
     { method: "POST" },
   );
 export const getMyFeedback = () =>
-  apiClient<CustomerListResponse<CustomerFeedback>>(
-    "/feedbacks",
-    listOptions,
-  );
+  apiClient<CustomerListResponse<CustomerFeedback>>("/feedbacks", listOptions);
 export const submitFeedback = (payload: FeedbackPayload) =>
   apiClient<IApiResponse<CustomerFeedback>>("/feedbacks", {
     method: "POST",
