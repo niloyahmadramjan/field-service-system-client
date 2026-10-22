@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
-import { useGetMe } from "@/hooks/auth.hook";
+import { useQueryClient } from "@tanstack/react-query";
+import { useGetMe, useLogout } from "@/hooks/auth.hook";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/toast";
 import {
   Sheet,
   SheetClose,
@@ -17,7 +19,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { DashboardFooter } from "@/components/dashboard/dashboard-footer";
 import {
   Activity,
   CalendarDays,
@@ -29,10 +30,9 @@ import {
   ReceiptText,
   UserRound,
   Wrench,
-  BriefcaseBusiness,
-  ArrowBigLeftDash,
-  ArrowLeftCircleIcon,
   Home,
+  LoaderCircle,
+  LogOut,
 } from "lucide-react";
 
 const navigation = [
@@ -85,7 +85,10 @@ function NavLinks({ closeOnClick = false }: { closeOnClick?: boolean }) {
 }
 
 export function CustomerShell({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const { data } = useGetMe();
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
   const profile = data?.data;
   const initials =
     profile?.name
@@ -94,6 +97,30 @@ export function CustomerShell({ children }: { children: ReactNode }) {
       .map((part) => part[0])
       .join("")
       .toUpperCase() ?? "CU";
+
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        queryClient.removeQueries({ queryKey: ["user"] });
+        queryClient.removeQueries({ queryKey: ["customer"] });
+        toast.add({
+          title: "Logout successful",
+          description: "You have been logged out.",
+          type: "success",
+        });
+        router.replace("/login");
+        router.refresh();
+      },
+      onError: () => {
+        toast.add({
+          title: "Logout failed",
+          description: "Could not log you out. Please try again.",
+          type: "error",
+        });
+      },
+    });
+  };
+
   return (
     <div className="min-h-[calc(100vh-4rem)] flex-1 bg-muted/30">
       {/* <header className="sticky top-[4.25rem] z-30 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
@@ -156,7 +183,7 @@ export function CustomerShell({ children }: { children: ReactNode }) {
         </div>
       </header> */}
       <div className="mx-auto grid max-w-[1600px] flex-1 lg:grid-cols-[250px_minmax(0,1fr)]">
-        <aside className="sticky top-32 hidden h-[calc(100vh-8rem)] border-r bg-background/70 px-4 py-7 lg:block">
+        <aside className="sticky top-32 hidden h-[calc(100vh-8rem)] flex-col border-r bg-background/70 px-4 py-7 lg:flex">
           <div className="mb-6 px-3">
             <Link
               href="/"
@@ -181,6 +208,22 @@ export function CustomerShell({ children }: { children: ReactNode }) {
               nativeButton={false}
             >
               Explore services
+            </Button>
+          </div>
+          <div className="mt-auto border-t pt-5">
+            <Button
+              type="button"
+              variant="ghost"
+              className="w-full justify-start text-destructive hover:text-destructive"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+            >
+              {isLoggingOut ? (
+                <LoaderCircle className="size-4 animate-spin" />
+              ) : (
+                <LogOut className="size-4" />
+              )}
+              {isLoggingOut ? "Logging out…" : "Log out"}
             </Button>
           </div>
         </aside>
