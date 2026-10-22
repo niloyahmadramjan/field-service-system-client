@@ -10,10 +10,13 @@ import { useRouter } from "next/navigation";
 import { useRegister } from "@/hooks/auth.hook";
 import { Eye, EyeOffIcon } from "lucide-react";
 import { registerSchema } from "@/validation/auth.validation";
+import { getDashboardRoute, getRoleFromResponse } from "@/lib/dashboard-route";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function RegisterForm() {
   const [showPassword, setPassword] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { mutate: register, isPending: registerPedding } = useRegister();
 
@@ -38,13 +41,15 @@ export default function RegisterForm() {
       };
       register(registerData, {
         onSuccess: (res) => {
+          const role = getRoleFromResponse(res);
+          if (role) queryClient.invalidateQueries({ queryKey: ["user"] });
           toast.add({
             title: "successfully login",
             description: "Welcome back",
             type: "success",
           });
           // console.log(res);
-          router.push("/");
+          router.replace(getDashboardRoute(role ?? "CUSTOMER"));
         },
         onError: (err) => {
           toast.add({

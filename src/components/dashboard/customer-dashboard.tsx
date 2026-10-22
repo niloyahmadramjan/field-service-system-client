@@ -109,7 +109,7 @@ export function CustomerDashboard() {
           <div>
             <div className="mb-2 flex items-center gap-2">
               <Badge variant="secondary" className="gap-1">
-                <Sparkles className="size-3" /> Customer portal
+                 Customer portal
               </Badge>
               <Badge
                 variant={
@@ -197,7 +197,7 @@ export function CustomerDashboard() {
           </div>
         )}
 
-        <section className="grid gap-5 lg:grid-cols-[1.5fr_1fr]">
+        {/* <section className="grid gap-5 lg:grid-cols-[1.5fr_1fr]">
           <Card className="overflow-hidden">
             <div className="h-2 bg-gradient-to-r from-primary via-primary/70 to-sky-400" />
             <CardHeader className="flex flex-row items-center justify-between gap-4">
@@ -310,7 +310,7 @@ export function CustomerDashboard() {
               </CardContent>
             </Card>
           </div>
-        </section>
+        </section> */}
       </div>
     </main>
   );

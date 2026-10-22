@@ -1,4 +1,3 @@
-
 import { CustomerDashboard } from "@/components/dashboard/customer-dashboard";
 
 export const prefetch = "partial";

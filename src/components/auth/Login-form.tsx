@@ -10,6 +10,9 @@ import { useRouter } from "next/navigation";
 import { useLogin } from "@/hooks/auth.hook";
 import { Eye, EyeOffIcon, Loader } from "lucide-react";
 import { loginSchema } from "@/validation/auth.validation";
+import { getMe } from "@/api/auth.api";
+import { getDashboardRoute, getRoleFromResponse } from "@/lib/dashboard-route";
+import { useQueryClient } from "@tanstack/react-query";
 
 const demoCredentials = [
   {
@@ -37,6 +40,7 @@ const demoCredentials = [
 export default function LoginForm() {
   const [showPassword, setPassword] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { mutate: login, isPending: loginPedding } = useLogin();
 
@@ -54,13 +58,23 @@ export default function LoginForm() {
         password: value.password,
       };
       login(loginData, {
-        onSuccess: () => {
+        onSuccess: async (response) => {
+          let role = getRoleFromResponse(response);
+          if (!role) {
+            try {
+              const profile = await getMe();
+              role = getRoleFromResponse(profile);
+              queryClient.setQueryData(["user"], profile);
+            } catch {
+              // Keep login usable if the login response does not include a role.
+            }
+          }
           toast.add({
             title: "successfully login",
             description: "Welcome back",
             type: "success",
           });
-          router.push("/");
+          router.replace(getDashboardRoute(role));
         },
         onError: (err) => {
           toast.add({
@@ -81,13 +95,23 @@ export default function LoginForm() {
         password: credential.password,
       },
       {
-        onSuccess: () => {
+        onSuccess: async (response) => {
+          let role = getRoleFromResponse(response);
+          if (!role) {
+            try {
+              const profile = await getMe();
+              role = getRoleFromResponse(profile);
+              queryClient.setQueryData(["user"], profile);
+            } catch {
+              // Fall back to the role associated with the selected demo account.
+            }
+          }
           toast.add({
             title: "Successfully logged in",
             description: `Welcome back, ${credential.role}`,
             type: "success",
           });
-          router.push("/");
+          router.replace(getDashboardRoute(role ?? credential.role));
         },
         onError: (err) => {
           toast.add({

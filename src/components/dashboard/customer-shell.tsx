@@ -30,6 +30,9 @@ import {
   UserRound,
   Wrench,
   BriefcaseBusiness,
+  ArrowBigLeftDash,
+  ArrowLeftCircleIcon,
+  Home,
 } from "lucide-react";
 
 const navigation = [
@@ -40,11 +43,11 @@ const navigation = [
   { label: "Invoices", href: "/dashboard/invoices", icon: ReceiptText },
   { label: "Payments", href: "/dashboard/payments", icon: CreditCard },
   { label: "Feedback", href: "/dashboard/feedback", icon: MessageSquareText },
-  {
-    label: "Technician application",
-    href: "/dashboard/technician-application",
-    icon: BriefcaseBusiness,
-  },
+  // {
+  //   label: "Technician application",
+  //   href: "/dashboard/technician-application",
+  //   icon: BriefcaseBusiness,
+  // },
   { label: "My profile", href: "/dashboard/profile", icon: UserRound },
 ];
 
@@ -155,15 +158,18 @@ export function CustomerShell({ children }: { children: ReactNode }) {
       <div className="mx-auto grid max-w-[1600px] flex-1 lg:grid-cols-[250px_minmax(0,1fr)]">
         <aside className="sticky top-32 hidden h-[calc(100vh-8rem)] border-r bg-background/70 px-4 py-7 lg:block">
           <div className="mb-6 px-3">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Workspace
-            </p>
+            <Link
+              href="/"
+              className=" text-muted-foreground flex justify-between mb-3 px-3 text-md font-semibold uppercase tracking-wider"
+            >
+              <Home/> 
+              <span>Back to home</span>
+            </Link>
           </div>
           <Suspense fallback={<div className="h-64" />}>
             <NavLinks />
           </Suspense>
           <div className="mt-8 rounded-xl border bg-gradient-to-br from-primary/10 to-background p-4">
-            <Activity className="mb-3 size-5 text-primary" />
             <p className="text-sm font-semibold">Need a service?</p>
             <p className="mt-1 text-xs leading-5 text-muted-foreground">
               Browse available services and request a visit.

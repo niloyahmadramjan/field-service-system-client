@@ -7,7 +7,14 @@ import { ReactNode } from "react";
 
 export function SiteChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  if (pathname === "/dashboard" || pathname.startsWith("/dashboard/"))
+  if (
+    pathname === "/dashboard" ||
+    pathname.startsWith("/dashboard/") ||
+    pathname === "/admin" ||
+    pathname.startsWith("/admin/") ||
+    pathname === "/technician" ||
+    pathname.startsWith("/technician/")
+  )
     return <>{children}</>;
   return (
     <>

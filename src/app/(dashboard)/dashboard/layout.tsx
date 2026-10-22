@@ -1,4 +1,3 @@
-
 import { CustomerShell } from "@/components/dashboard/customer-shell";
 import type { ReactNode } from "react";
 
