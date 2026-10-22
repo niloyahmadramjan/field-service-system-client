@@ -96,7 +96,7 @@ export function RoleDashboardShell({
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="border-b bg-background px-4 py-4 sm:px-6">
+          {/* <header className="border-b bg-background px-4 py-4 sm:px-6">
             <div className="flex items-center gap-3 md:hidden">
               <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                 <Activity className="size-4" />
@@ -117,11 +117,11 @@ export function RoleDashboardShell({
                 {kind === "admin" ? "Admin workspace" : "Technician workspace"}
               </span>
             </div>
-          </header>
+          </header> */}
 
           <nav
             aria-label={`${title} navigation`}
-            className="flex gap-1 overflow-x-auto border-b bg-background px-3 py-2 md:hidden"
+            className="flex gap-1 overflow-x-auto border-b bg-background py-2 md:hidden"
           >
             {navigation[kind].map(({ label, path }) => {
               const href = `${base}/${path}`;
