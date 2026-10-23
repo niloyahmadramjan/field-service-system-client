@@ -29,6 +29,33 @@ export interface ServiceResponse {
   data: Service;
 }
 
+export interface ServicePayload {
+  name: string;
+  description: string;
+  price: string;
+}
+
+export interface CreateServiceResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: { createServiceResult: Service };
+}
+
+export interface ServiceMutationResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: Service;
+}
+
+export interface ServiceDeleteResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data?: Service | null;
+}
+
 export interface ServiceRequestPayload {
   title: string;
   description: string;

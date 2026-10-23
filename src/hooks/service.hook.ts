@@ -1,4 +1,4 @@
-import { getService, getServices, requestService } from "@/api/service.api";
+import { createService, deleteService, getService, getServices, requestService, updateService } from "@/api/service.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const serviceKeys = {
@@ -32,6 +32,40 @@ export function useRequestService() {
         queryClient.invalidateQueries({ queryKey: ["customer", "dashboard"] }),
         queryClient.invalidateQueries({ queryKey: ["customer", "requests"] }),
       ]);
+    },
+  });
+}
+
+export function useCreateService() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: createService,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: serviceKeys.all });
+    },
+  });
+}
+
+export function useUpdateService() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ serviceId, payload }: { serviceId: string; payload: Parameters<typeof updateService>[1] }) =>
+      updateService(serviceId, payload),
+    onSuccess: async (_result, variables) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: serviceKeys.all }),
+        queryClient.invalidateQueries({ queryKey: serviceKeys.detail(variables.serviceId) }),
+      ]);
+    },
+  });
+}
+
+export function useDeleteService() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteService,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: serviceKeys.all });
     },
   });
 }
