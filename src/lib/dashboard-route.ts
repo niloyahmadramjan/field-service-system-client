@@ -4,7 +4,7 @@ export function getDashboardRoute(role: UserRole | string | undefined) {
   switch (role?.toUpperCase()) {
     case UserRole.ADMIN:
     case UserRole.MANAGER:
-      return "/admin/dashboard";
+      return "/admin";
     case UserRole.TECHNICIAN:
       return "/technician/dashboard";
     case UserRole.CUSTOMER:

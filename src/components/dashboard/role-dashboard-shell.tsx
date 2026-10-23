@@ -10,10 +10,21 @@ import {
   ClipboardList,
   FileChartColumn,
   LayoutDashboard,
+  Menu,
   Settings,
   Users,
   Wrench,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 const navigation = {
@@ -37,6 +48,49 @@ const navigation = {
 
 type DashboardKind = keyof typeof navigation;
 
+function DashboardNavigation({
+  kind,
+  closeOnClick = false,
+}: {
+  kind: DashboardKind;
+  closeOnClick?: boolean;
+}) {
+  const pathname = usePathname();
+  const base = kind === "admin" ? "/admin" : "/technician";
+  const title = kind === "admin" ? "Operations dashboard" : "Technician dashboard";
+
+  return (
+    <nav aria-label={`${title} navigation`} className="space-y-1">
+      {navigation[kind].map(({ label, path, icon: Icon }) => {
+        const href = path ? `${base}/${path}` : base;
+        const active = pathname === href || (path !== "" && pathname.startsWith(`${href}/`));
+        const className = cn(
+          "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+          active
+            ? "bg-primary text-primary-foreground shadow-sm"
+            : "text-muted-foreground hover:bg-muted hover:text-foreground",
+        );
+
+        if (closeOnClick) {
+          return (
+            <SheetClose key={path || "overview"} render={<Link href={href} />} className={className}>
+              <Icon className="size-4" />
+              {label}
+            </SheetClose>
+          );
+        }
+
+        return (
+          <Link key={path || "overview"} href={href} aria-current={active ? "page" : undefined} className={className}>
+            <Icon className="size-4" />
+            {label}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
 export function RoleDashboardShell({
   kind,
   children,
@@ -44,15 +98,15 @@ export function RoleDashboardShell({
   kind: DashboardKind;
   children: ReactNode;
 }) {
-  const pathname = usePathname();
-  const base = kind === "admin" ? "/admin" : "/technician";
-  const title = kind === "admin" ? "Operations console" : "Technician portal";
+  const isAdmin = kind === "admin";
+  const base = isAdmin ? "/admin" : "/technician";
+  const title = isAdmin ? "Operations dashboard" : "Technician dashboard";
 
   return (
     <div className="min-h-screen bg-muted/30 text-foreground">
-      <div className="mx-auto flex min-h-screen max-w-[1600px]">
-        <aside className="hidden w-64 shrink-0 flex-col border-r bg-background px-4 py-6 md:flex">
-          <Link href={`${base}/dashboard`} className="mb-8 flex items-center gap-3 px-2">
+      <div className="mx-auto grid min-h-screen max-w-[1600px] lg:grid-cols-[250px_minmax(0,1fr)]">
+        <aside className="sticky top-0 hidden h-screen flex-col border-r bg-background/70 px-4 py-7 lg:flex">
+          <Link href={base} className="mb-8 flex items-center gap-3 px-2">
             <span className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
               <Activity className="size-5" />
             </span>
@@ -65,87 +119,39 @@ export function RoleDashboardShell({
           <p className="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Workspace
           </p>
-          <nav aria-label={`${title} navigation`} className="space-y-1">
-            {navigation[kind].map(({ label, path, icon: Icon }) => {
-              const href = `${base}/${path}`;
-              const active = pathname === href;
-              return (
-                <Link
-                  key={path}
-                  href={href}
-                  aria-current={active ? "page" : undefined}
-                  className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                    active
-                      ? "bg-primary text-primary-foreground shadow-sm"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                  )}
-                >
-                  <Icon className="size-4" />
-                  {label}
-                </Link>
-              );
-            })}
-          </nav>
-          <div className="mt-auto rounded-xl border bg-muted/50 p-4">
+          <DashboardNavigation kind={kind} />
+
+          <div className="mt-auto rounded-xl border bg-gradient-to-br from-primary/10 to-background p-4">
             <p className="text-sm font-semibold">Workspace ready</p>
             <p className="mt-1 text-xs leading-5 text-muted-foreground">
-              Dashboard sections are ready for their data and workflows.
+              Open a section to manage your field service work.
             </p>
           </div>
         </aside>
 
-        <div className="flex min-w-0 flex-1 flex-col">
-          {/* <header className="border-b bg-background px-4 py-4 sm:px-6">
-            <div className="flex items-center gap-3 md:hidden">
-              <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <Activity className="size-4" />
-              </span>
-              <div>
-                <p className="text-sm font-semibold">Field Service</p>
-                <p className="text-xs text-muted-foreground">{title}</p>
-              </div>
-            </div>
-            <div className="hidden items-center justify-between md:flex">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Workspace
-                </p>
-                <h1 className="mt-1 text-lg font-semibold">{title}</h1>
-              </div>
-              <span className="rounded-full border bg-muted/50 px-3 py-1.5 text-xs font-medium text-muted-foreground">
-                {kind === "admin" ? "Admin workspace" : "Technician workspace"}
-              </span>
-            </div>
-          </header> */}
-
-          <nav
-            aria-label={`${title} navigation`}
-            className="flex gap-1 overflow-x-auto border-b bg-background py-2 md:hidden"
-          >
-            {navigation[kind].map(({ label, path }) => {
-              const href = `${base}/${path}`;
-              const active = pathname === href;
-              return (
-                <Link
-                  key={path}
-                  href={href}
-                  aria-current={active ? "page" : undefined}
-                  className={cn(
-                    "shrink-0 rounded-md px-3 py-2 text-xs font-medium",
-                    active
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:bg-muted",
-                  )}
-                >
-                  {label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
-        </div>
+        <main className="min-w-0 px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
+          <div className="mb-4 lg:hidden">
+            <Sheet>
+              <SheetTrigger
+                render={
+                  <Button variant="outline" size="icon" aria-label="Open dashboard menu" />
+                }
+              >
+                <Menu className="size-5" />
+              </SheetTrigger>
+              <SheetContent side="left" className="w-72">
+                <SheetHeader>
+                  <SheetTitle>{title}</SheetTitle>
+                  <SheetDescription>Manage your field service workspace</SheetDescription>
+                </SheetHeader>
+                <div className="px-4">
+                  <DashboardNavigation kind={kind} closeOnClick />
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+          {children}
+        </main>
       </div>
     </div>
   );
