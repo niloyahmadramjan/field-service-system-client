@@ -9,6 +9,7 @@ import {
 import type {
   TechnicianListParams,
   WorkOrderListParams,
+  WorkOrderStatus,
 } from "@/types/work-order.types";
 
 export const workOrderKeys = {
@@ -56,7 +57,7 @@ export function useAssignTechnician() {
 export function useUpdateWorkOrderStatus() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ workOrderId, status }: { workOrderId: string; status: "CANCELLED" }) =>
+    mutationFn: ({ workOrderId, status }: { workOrderId: string; status: WorkOrderStatus }) =>
       updateWorkOrderStatus(workOrderId, { status }),
     onSuccess: async (_result, payload) => {
       await Promise.all([

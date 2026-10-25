@@ -2,16 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, Eye, LoaderCircle, MoreHorizontal, SearchX, UserRoundPlus } from "lucide-react";
+import { Eye, FilePlus2, LoaderCircle, MoreHorizontal, RefreshCw, SearchX, UserRoundPlus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/components/ui/toast";
 import RequestPagination from "@/components/admin/requests/request-pagination";
 import { useUpdateWorkOrderStatus, useWorkOrders } from "@/hooks/work-order.hook";
 import type { WorkOrder, WorkOrderStatus } from "@/types/work-order.types";
+import CreateInvoiceDialog from "@/components/admin/reports/create-invoice-dialog";
 
 const PAGE_SIZE = 10;
 
@@ -32,38 +35,43 @@ function statusClass(status: WorkOrderStatus) {
 }
 
 function WorkOrderActions({ order }: { order: WorkOrder }) {
-  const [confirmCancel, setConfirmCancel] = useState(false);
+  const [statusDialogOpen, setStatusDialogOpen] = useState(false);
+  const [nextStatus, setNextStatus] = useState<WorkOrderStatus>(order.status);
+  const [createInvoiceOpen, setCreateInvoiceOpen] = useState(false);
   const updateStatus = useUpdateWorkOrderStatus();
 
-  const cancel = () => updateStatus.mutate({ workOrderId: order.id, status: "CANCELLED" }, {
+  const saveStatus = () => updateStatus.mutate({ workOrderId: order.id, status: nextStatus }, {
     onSuccess: () => {
-      toast.add({ title: "Work order cancelled", description: `${order.workOrderNumber} was cancelled.`, type: "success" });
-      setConfirmCancel(false);
+      toast.add({ title: "Work order status updated", description: `${order.workOrderNumber} is now ${nextStatus.replaceAll("_", " ").toLowerCase()}.`, type: "success" });
+      setStatusDialogOpen(false);
     },
-    onError: (error) => toast.add({ title: "Could not cancel work order", description: error.message, type: "error" }),
+    onError: (error) => toast.add({ title: "Could not update work order", description: error.message, type: "error" }),
   });
 
-  return <>
+  return <div className="flex items-center justify-end gap-1">
+    {!order.invoice && <Button size="sm" onClick={() => setCreateInvoiceOpen(true)}><FilePlus2 className="size-4" />Create invoice</Button>}
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="outline" size="icon" aria-label={`Actions for ${order.workOrderNumber}`}><MoreHorizontal className="size-4" /></Button>} />
       <DropdownMenuContent align="end">
         <DropdownMenuItem render={<Link href={`/admin/work-orders/${order.id}`} />}><UserRoundPlus className="size-4" />Assign technician</DropdownMenuItem>
-        {order.status !== "CANCELLED" && order.status !== "COMPLETED" && <DropdownMenuItem variant="destructive" onClick={() => setConfirmCancel(true)}><AlertTriangle className="size-4" />Cancel work order</DropdownMenuItem>}
+        <DropdownMenuItem onClick={() => { setNextStatus(order.status); setStatusDialogOpen(true); }}><RefreshCw className="size-4" />Update status</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-    <Dialog open={confirmCancel} onOpenChange={setConfirmCancel}>
+    <Dialog open={statusDialogOpen} onOpenChange={setStatusDialogOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Cancel this work order?</DialogTitle>
-          <DialogDescription>This changes {order.workOrderNumber} to CANCELLED.</DialogDescription>
+          <DialogTitle>Update work order status</DialogTitle>
+          <DialogDescription>Choose a status for {order.workOrderNumber}. The server checks whether the transition is allowed.</DialogDescription>
         </DialogHeader>
+        <div className="space-y-2"><Label htmlFor={`work-order-status-${order.id}`}>Status</Label><Select value={nextStatus} onValueChange={(value) => { if (value) setNextStatus(value as WorkOrderStatus); }}><SelectTrigger id={`work-order-status-${order.id}`} className="w-full"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="CREATED">Created</SelectItem><SelectItem value="ASSIGNED">Assigned</SelectItem><SelectItem value="IN_PROGRESS">In progress</SelectItem><SelectItem value="COMPLETED">Completed</SelectItem><SelectItem value="CANCELLED">Cancelled</SelectItem></SelectContent></Select></div>
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <Button variant="outline" onClick={() => setConfirmCancel(false)} disabled={updateStatus.isPending}>Keep work order</Button>
-          <Button variant="destructive" onClick={cancel} disabled={updateStatus.isPending}>{updateStatus.isPending && <LoaderCircle className="animate-spin" />}Cancel work order</Button>
+          <Button variant="outline" onClick={() => setStatusDialogOpen(false)} disabled={updateStatus.isPending}>Close</Button>
+          <Button variant={nextStatus === "CANCELLED" ? "destructive" : "default"} onClick={saveStatus} disabled={updateStatus.isPending || nextStatus === order.status}>{updateStatus.isPending && <LoaderCircle className="animate-spin" />}Save status</Button>
         </div>
       </DialogContent>
     </Dialog>
-  </>;
+    <CreateInvoiceDialog open={createInvoiceOpen} onOpenChange={setCreateInvoiceOpen} workOrder={order} />
+  </div>;
 }
 
 export default function WorkOrderTable({ status, search }: { status?: WorkOrderStatus; search: string }) {

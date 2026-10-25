@@ -1,4 +1,5 @@
 import { CustomerShell } from "@/components/dashboard/customer-shell";
+import { RoleRouteGuard } from "@/components/auth/role-route-guard";
 import type { ReactNode } from "react";
 
 export const instant = false;
@@ -8,5 +9,5 @@ export default function CustomerDashboardLayout({
 }: {
   children: ReactNode;
 }) {
-  return <CustomerShell>{children}</CustomerShell>;
+  return <RoleRouteGuard role="customer"><CustomerShell>{children}</CustomerShell></RoleRouteGuard>;
 }
