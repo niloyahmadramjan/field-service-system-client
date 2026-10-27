@@ -10,12 +10,14 @@ import {
   ClipboardList,
   FileChartColumn,
   LayoutDashboard,
+  LoaderCircle,
+  LogOut,
   Menu,
-  Settings,
   Users,
   Wrench,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useDashboardLogout } from "@/hooks/auth.hook";
 import {
   Sheet,
   SheetClose,
@@ -30,12 +32,11 @@ import { cn } from "@/lib/utils";
 const navigation = {
   admin: [
     { label: "Overview", path: "", icon: LayoutDashboard },
-    { label: "Users", path: "users", icon: Users },
+    { label: "Technicians", path: "technician", icon: Users },
     { label: "Services", path: "services", icon: Wrench },
     { label: "Service requests", path: "requests", icon: ClipboardList },
     { label: "Work orders", path: "work-orders", icon: BriefcaseBusiness },
     { label: "Reports", path: "reports", icon: FileChartColumn },
-    { label: "Settings", path: "settings", icon: Settings },
   ],
   technician: [
     { label: "Overview", path: "dashboard", icon: LayoutDashboard },
@@ -98,6 +99,7 @@ export function RoleDashboardShell({
   kind: DashboardKind;
   children: ReactNode;
 }) {
+  const { logout, isLoggingOut } = useDashboardLogout();
   const isAdmin = kind === "admin";
   const base = isAdmin ? "/admin" : "/technician";
   const title = isAdmin ? "Operations dashboard" : "Technician dashboard";
@@ -120,12 +122,11 @@ export function RoleDashboardShell({
             Workspace
           </p>
           <DashboardNavigation kind={kind} />
-
-          <div className="mt-auto rounded-xl border bg-gradient-to-br from-primary/10 to-background p-4">
-            <p className="text-sm font-semibold">Workspace ready</p>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">
-              Open a section to manage your field service work.
-            </p>
+          <div className="mt-auto border-t pt-5">
+            <Button type="button" variant="ghost" className="w-full justify-start text-destructive hover:text-destructive" onClick={logout} disabled={isLoggingOut}>
+              {isLoggingOut ? <LoaderCircle className="size-4 animate-spin" /> : <LogOut className="size-4" />}
+              {isLoggingOut ? "Logging out…" : "Log out"}
+            </Button>
           </div>
         </aside>
 
@@ -146,6 +147,12 @@ export function RoleDashboardShell({
                 </SheetHeader>
                 <div className="px-4">
                   <DashboardNavigation kind={kind} closeOnClick />
+                  <div className="mt-4 border-t pt-4">
+                    <Button type="button" variant="ghost" className="w-full justify-start text-destructive hover:text-destructive" onClick={logout} disabled={isLoggingOut}>
+                      {isLoggingOut ? <LoaderCircle className="size-4 animate-spin" /> : <LogOut className="size-4" />}
+                      {isLoggingOut ? "Logging out…" : "Log out"}
+                    </Button>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>

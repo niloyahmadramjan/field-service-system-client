@@ -1,14 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useGetMe, useLogout } from "@/hooks/auth.hook";
+import { useDashboardLogout, useGetMe } from "@/hooks/auth.hook";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/toast";
 import {
   Sheet,
   SheetClose,
@@ -85,10 +83,8 @@ function NavLinks({ closeOnClick = false }: { closeOnClick?: boolean }) {
 }
 
 export function CustomerShell({ children }: { children: ReactNode }) {
-  const router = useRouter();
-  const queryClient = useQueryClient();
   const { data } = useGetMe();
-  const { mutate: logout, isPending: isLoggingOut } = useLogout();
+  const { logout, isLoggingOut } = useDashboardLogout();
   const profile = data?.data;
   const initials =
     profile?.name
@@ -98,31 +94,34 @@ export function CustomerShell({ children }: { children: ReactNode }) {
       .join("")
       .toUpperCase() ?? "CU";
 
-  const handleLogout = () => {
-    logout(undefined, {
-      onSuccess: () => {
-        queryClient.removeQueries({ queryKey: ["user"] });
-        queryClient.removeQueries({ queryKey: ["customer"] });
-        toast.add({
-          title: "Logout successful",
-          description: "You have been logged out.",
-          type: "success",
-        });
-        router.replace("/login");
-        router.refresh();
-      },
-      onError: () => {
-        toast.add({
-          title: "Logout failed",
-          description: "Could not log you out. Please try again.",
-          type: "error",
-        });
-      },
-    });
-  };
-
   return (
     <div className="min-h-[calc(100vh-4rem)] flex-1 bg-muted/30">
+      <div className="flex items-center justify-between border-b bg-background px-4 py-3 lg:hidden">
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">Field service</p>
+          <p className="font-semibold">Customer dashboard</p>
+        </div>
+        <Sheet>
+          <SheetTrigger render={<Button variant="outline" size="icon" aria-label="Open customer dashboard menu" />}>
+            <Menu className="size-5" />
+          </SheetTrigger>
+          <SheetContent side="left" className="w-72">
+            <SheetHeader>
+              <SheetTitle>Customer portal</SheetTitle>
+              <SheetDescription>Manage your services and account.</SheetDescription>
+            </SheetHeader>
+            <div className="space-y-4 px-4">
+              <Suspense fallback={<div className="h-64" />}><NavLinks closeOnClick /></Suspense>
+              <div className="border-t pt-4">
+                <Button type="button" variant="ghost" className="w-full justify-start text-destructive hover:text-destructive" onClick={logout} disabled={isLoggingOut}>
+                  {isLoggingOut ? <LoaderCircle className="size-4 animate-spin" /> : <LogOut className="size-4" />}
+                  {isLoggingOut ? "Logging out…" : "Log out"}
+                </Button>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
       {/* <header className="sticky top-[4.25rem] z-30 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
         <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
@@ -215,7 +214,7 @@ export function CustomerShell({ children }: { children: ReactNode }) {
               type="button"
               variant="ghost"
               className="w-full justify-start text-destructive hover:text-destructive"
-              onClick={handleLogout}
+              onClick={logout}
               disabled={isLoggingOut}
             >
               {isLoggingOut ? (
