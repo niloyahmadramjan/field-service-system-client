@@ -41,9 +41,7 @@ const navigation = {
   technician: [
     { label: "Overview", path: "dashboard", icon: LayoutDashboard },
     { label: "Assigned jobs", path: "jobs", icon: BriefcaseBusiness },
-    { label: "Schedule", path: "schedule", icon: CalendarDays },
     { label: "Work orders", path: "work-orders", icon: ClipboardList },
-    { label: "Profile", path: "profile", icon: Users },
   ],
 } as const;
 

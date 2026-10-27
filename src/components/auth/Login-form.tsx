@@ -27,7 +27,7 @@ const demoCredentials = [
   },
   {
     role: "Technician",
-    email: "technician@fieldservice.com",
+    email: "technician@gmail.com",
     password: "Technician@123",
   },
   {
