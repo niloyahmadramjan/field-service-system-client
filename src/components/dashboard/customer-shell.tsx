@@ -17,7 +17,8 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import {
-  CalendarDays,
+  BriefcaseBusiness,
+  Home,
   CreditCard,
   FileText,
   LayoutDashboard,
@@ -26,7 +27,6 @@ import {
   ReceiptText,
   UserRound,
   Wrench,
-  Home,
   LoaderCircle,
   LogOut,
 } from "lucide-react";
@@ -39,11 +39,7 @@ const navigation = [
   { label: "Invoices", href: "/dashboard/invoices", icon: ReceiptText },
   { label: "Payments", href: "/dashboard/payments", icon: CreditCard },
   { label: "Feedback", href: "/dashboard/feedback", icon: MessageSquareText },
-  // {
-  //   label: "Technician application",
-  //   href: "/dashboard/technician-application",
-  //   icon: BriefcaseBusiness,
-  // },
+  { label: "Apply as technician", href: "/dashboard/technician-application", icon: BriefcaseBusiness },
   { label: "My profile", href: "/dashboard/profile", icon: UserRound },
 ];
 

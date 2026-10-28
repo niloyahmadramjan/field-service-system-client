@@ -13,6 +13,7 @@ import type {
   FeedbackPayload,
   PaymentStartResponse,
   TechnicianApplication,
+  TechnicianApplicationPayload,
   UpdateServiceRequestPayload,
   CustomerDashboardResponse,
   DeleteServiceRequestResponse,
@@ -79,7 +80,36 @@ export const submitFeedback = (payload: FeedbackPayload) =>
     method: "POST",
     body: payload,
   });
-export const getTechnicianApplication = () =>
-  apiClient<IApiResponse<TechnicianApplication | null>>(
-    "/technician/my-application",
-  );
+export const getTechnicianApplication = async () => {
+  try {
+    return await apiClient<IApiResponse<TechnicianApplication>>(
+      "/technician/my-application",
+    );
+  } catch (error) {
+    // The API reports a customer with no application as 404. Treat that as
+    // the empty state; other failures should remain visible to the user.
+    const apiError = error as {
+      status?: number;
+      statusCode?: number;
+      response?: { status?: number };
+    };
+    if (
+      apiError.status === 404 ||
+      apiError.statusCode === 404 ||
+      apiError.response?.status === 404
+    ) {
+      return {
+        success: true,
+        statusCode: 200,
+        message: "No technician application found",
+        data: null,
+      } satisfies IApiResponse<TechnicianApplication | null>;
+    }
+    throw error;
+  }
+};
+export const applyAsTechnician = (payload: TechnicianApplicationPayload) =>
+  apiClient<IApiResponse<TechnicianApplication>>("/technician/apply", {
+    method: "POST",
+    body: payload,
+  });

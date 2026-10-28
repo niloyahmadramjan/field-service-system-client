@@ -10,6 +10,7 @@ import {
   getMyWorkOrders,
   getMyFeedback,
   getTechnicianApplication,
+  applyAsTechnician,
   updateServiceRequest,
   deleteServiceRequest,
   startInvoicePayment,
@@ -61,6 +62,18 @@ export const useTechnicianApplication = () =>
     queryKey: customerKeys.technicianApplication,
     queryFn: getTechnicianApplication,
   });
+
+export function useApplyAsTechnician() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: applyAsTechnician,
+    onSuccess: async (response) => {
+      queryClient.setQueryData(customerKeys.technicianApplication, response);
+      await queryClient.invalidateQueries({ queryKey: customerKeys.technicianApplication });
+      await queryClient.invalidateQueries({ queryKey: customerKeys.profile });
+    },
+  });
+}
 
 export function useUpdateCustomerProfile() {
   const queryClient = useQueryClient();

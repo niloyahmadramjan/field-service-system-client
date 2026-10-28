@@ -28,6 +28,7 @@ import {
   Wrench,
   CheckCircle2,
   ReceiptText,
+  BriefcaseBusiness,
 } from "lucide-react";
 import { format, isValid, parseISO } from "date-fns";
 import { useCustomerDashboard } from "@/hooks/customer.hook";
@@ -126,9 +127,14 @@ export function CustomerDashboard() {
               Manage your account and find the right help for your home.
             </p>
           </div>
-          <Button render={<Link href="/services" />} nativeButton={false}>
-            Browse services <ArrowRight data-icon="inline-end" />
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" render={<Link href="/dashboard/technician-application" />} nativeButton={false}>
+              <BriefcaseBusiness className="size-4" /> Apply as technician
+            </Button>
+            <Button render={<Link href="/services" />} nativeButton={false}>
+              Browse services <ArrowRight data-icon="inline-end" />
+            </Button>
+          </div>
         </div>
 
         <section

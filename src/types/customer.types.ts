@@ -131,7 +131,14 @@ export interface TechnicianApplication {
   applicationStatus: "PENDING" | "APPROVED" | "REJECTED";
   status?: "AVAILABLE" | "BUSY" | "OFFLINE";
   employeeId?: string;
-  skills?: string[];
+  skills?: string;
+  bio?: string | null;
+  rejectedReason?: string | null;
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface TechnicianApplicationPayload {
+  skills: string;
+  bio: string;
 }
