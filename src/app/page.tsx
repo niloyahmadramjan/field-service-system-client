@@ -1,4 +1,3 @@
-import HeaderSection from "@/components/home/public/header";
 import HeroSection from "@/components/home/sections/hero";
 import StatsSection from "@/components/home/sections/stats";
 import ServicesSection from "@/components/home/sections/services";
@@ -8,13 +7,10 @@ import FeaturesSection from "@/components/home/sections/features";
 import TestimonialsSection from "@/components/home/sections/testimonials";
 import FaqSection from "@/components/home/sections/faq";
 import CtaSection from "@/components/home/sections/cta";
-import Footer from "@/components/home/footer/footer";
 
 export default function HomePage() {
   return (
     <>
-      {/* <HeaderSection /> */}
-
       <main className="flex-1">
         <HeroSection />
         <StatsSection />
@@ -27,7 +23,6 @@ export default function HomePage() {
         <CtaSection />
       </main>
 
-      {/* <Footer /> */}
     </>
   );
 }

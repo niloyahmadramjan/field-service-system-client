@@ -4,6 +4,7 @@ import type {
   TechnicianWorkOrderListParams,
   TechnicianWorkOrdersResponse,
 } from "@/types/technician-work-order.types";
+import type { UpdateWorkOrderStatusPayload, WorkOrderDetailResponse } from "@/types/work-order.types";
 
 export function getMyWorkOrders(params: TechnicianWorkOrderListParams) {
   return apiClient<TechnicianWorkOrdersResponse>("/work-orders", {
@@ -18,5 +19,12 @@ export function getMyWorkOrders(params: TechnicianWorkOrderListParams) {
 export function getMyWorkOrder(workOrderId: string) {
   return apiClient<TechnicianWorkOrderDetailResponse>(
     `/work-orders/${encodeURIComponent(workOrderId)}`,
+  );
+}
+
+export function updateMyWorkOrderStatus(workOrderId: string, payload: UpdateWorkOrderStatusPayload) {
+  return apiClient<WorkOrderDetailResponse>(
+    `/work-orders/${encodeURIComponent(workOrderId)}/status`,
+    { method: "PATCH", body: payload },
   );
 }

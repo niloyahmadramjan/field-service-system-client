@@ -320,7 +320,7 @@ export default function RequestTable({ status, search }: RequestTableProps) {
                   </TableCell>
                 </TableRow>
               )}
-            {requests.map((request: any) => (
+            {requests.map((request) => (
               <TableRow key={request.id}>
                 <TableCell>
                   <div className="space-y-1">

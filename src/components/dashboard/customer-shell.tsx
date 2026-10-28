@@ -4,8 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
-import { useDashboardLogout, useGetMe } from "@/hooks/auth.hook";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useDashboardLogout } from "@/hooks/auth.hook";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -18,7 +17,6 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import {
-  Activity,
   CalendarDays,
   CreditCard,
   FileText,
@@ -37,7 +35,7 @@ const navigation = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { label: "Service requests", href: "/dashboard/requests", icon: FileText },
   { label: "Work orders", href: "/dashboard/work-orders", icon: Wrench },
-  { label: "Service visits", href: "/dashboard/visits", icon: CalendarDays },
+  // { label: "Service visits", href: "/dashboard/visits", icon: CalendarDays },
   { label: "Invoices", href: "/dashboard/invoices", icon: ReceiptText },
   { label: "Payments", href: "/dashboard/payments", icon: CreditCard },
   { label: "Feedback", href: "/dashboard/feedback", icon: MessageSquareText },
@@ -83,16 +81,7 @@ function NavLinks({ closeOnClick = false }: { closeOnClick?: boolean }) {
 }
 
 export function CustomerShell({ children }: { children: ReactNode }) {
-  const { data } = useGetMe();
   const { logout, isLoggingOut } = useDashboardLogout();
-  const profile = data?.data;
-  const initials =
-    profile?.name
-      .split(/\s+/)
-      .slice(0, 2)
-      .map((part) => part[0])
-      .join("")
-      .toUpperCase() ?? "CU";
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex-1 bg-muted/30">

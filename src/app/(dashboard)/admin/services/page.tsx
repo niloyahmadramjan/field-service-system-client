@@ -46,6 +46,6 @@ export default function AdminServicesPage() {
         </Tabs>
       </CardContent>
     </Card>
-    <ServiceFormDialog open={createOpen} onOpenChange={setCreateOpen} service={null} />
+    {createOpen && <ServiceFormDialog open onOpenChange={setCreateOpen} service={null} />}
   </section>;
 }

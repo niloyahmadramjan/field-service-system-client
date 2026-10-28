@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, CalendarDays, FileText, LoaderCircle, MapPin, Plus, ReceiptText, Trash2 } from "lucide-react";
@@ -42,15 +42,8 @@ function Detail({ label, value }: { label: string; value?: ReactNode }) {
 
 function EditInvoiceDialog({ invoice, open, onOpenChange }: { invoice: Invoice; open: boolean; onOpenChange: (open: boolean) => void }) {
   const [status, setStatus] = useState<InvoiceStatus>(invoice.status);
-  const [dueDate, setDueDate] = useState(dateInputValue(invoice.dueDate));
+  const [dueDate, setDueDate] = useState(() => dateInputValue(invoice.dueDate));
   const update = useUpdateInvoice();
-
-  useEffect(() => {
-    if (open) {
-      setStatus(invoice.status);
-      setDueDate(dateInputValue(invoice.dueDate));
-    }
-  }, [invoice, open]);
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -74,14 +67,6 @@ function AddItemDialog({ invoice, open, onOpenChange }: { invoice: Invoice; open
   const [category, setCategory] = useState<InvoiceItemCategory>("OTHER");
   const [amount, setAmount] = useState("");
   const addItem = useAddInvoiceItem();
-
-  useEffect(() => {
-    if (open) {
-      setTitle("");
-      setCategory("OTHER");
-      setAmount("");
-    }
-  }, [open]);
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -137,8 +122,8 @@ export default function InvoiceDetailPage() {
       <Card className="h-fit"><CardHeader><div className="flex items-center gap-2"><CalendarDays className="size-4 text-muted-foreground" /><CardTitle className="text-base">Billing dates</CardTitle></div></CardHeader><CardContent className="space-y-4 border-t pt-5"><Detail label="Created" value={dateLabel(invoice.createdAt)} /><Detail label="Issued" value={dateLabel(invoice.issuedAt)} /><Detail label="Due" value={dateLabel(invoice.dueDate)} /><Button variant="outline" className="w-full" onClick={() => setEditOpen(true)}>Change status or due date</Button></CardContent></Card>
     </div>
 
-    <EditInvoiceDialog invoice={invoice} open={editOpen} onOpenChange={setEditOpen} />
-    <AddItemDialog invoice={invoice} open={addItemOpen} onOpenChange={setAddItemOpen} />
+    {editOpen && <EditInvoiceDialog key={`${invoice.id}-${invoice.updatedAt}`} invoice={invoice} open onOpenChange={setEditOpen} />}
+    {addItemOpen && <AddItemDialog key={`${invoice.id}-${invoice.updatedAt}`} invoice={invoice} open onOpenChange={setAddItemOpen} />}
     <Dialog open={confirmDelete} onOpenChange={setConfirmDelete}><DialogContent><DialogHeader><DialogTitle>Delete this invoice?</DialogTitle><DialogDescription>{invoice.invoiceNumber} will be permanently removed.</DialogDescription></DialogHeader><div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><Button variant="outline" onClick={() => setConfirmDelete(false)} disabled={remove.isPending}>Keep invoice</Button><Button variant="destructive" onClick={deleteInvoice} disabled={remove.isPending}>{remove.isPending && <LoaderCircle className="animate-spin" />}Delete invoice</Button></div></DialogContent></Dialog>
   </section>;
 }

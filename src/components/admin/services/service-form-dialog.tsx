@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -21,18 +21,12 @@ export default function ServiceFormDialog({ open, onOpenChange, service }: {
   onOpenChange: (open: boolean) => void;
   service: Service | null;
 }) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [name, setName] = useState(service?.name ?? "");
+  const [description, setDescription] = useState(service?.description ?? "");
+  const [price, setPrice] = useState(service?.price ?? "");
   const create = useCreateService();
   const update = useUpdateService();
   const busy = create.isPending || update.isPending;
-
-  useEffect(() => {
-    setName(service?.name ?? "");
-    setDescription(service?.description ?? "");
-    setPrice(service?.price ?? "");
-  }, [service, open]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

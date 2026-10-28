@@ -11,8 +11,6 @@ import {
   Clock3,
   CheckCircle2,
   Banknote,
-  ChartNoAxesCombined,
-  ArrowUpRight,
   Activity,
   CircleAlert,
 } from "lucide-react";
@@ -25,17 +23,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-interface AdminDashboardStats {
-  totalCustomers: number;
-  totalTechnicians: number;
-  totalServices: number;
-  totalServiceRequests: number;
-  pendingRequests: number;
-  totalWorkOrders: number;
-  totalCompletedOrders: number;
-  totalRevenue: number;
-}
+import { UserRole } from "@/types/auth.types";
 
 const formatNumber = (value: number) =>
   new Intl.NumberFormat("en-US").format(value);
@@ -53,6 +41,7 @@ export default function AdminDashboardPage() {
     isLoading,
     isError,
     error,
+    role,
   } = useGetAdminDashboard();
 
   if (isLoading) {
@@ -86,9 +75,7 @@ export default function AdminDashboardPage() {
     );
   }
 
-  const stats = adminDashboard?.data as
-    | AdminDashboardStats
-    | undefined;
+  const stats = adminDashboard?.data;
 
   if (!stats) {
     return (
@@ -195,7 +182,7 @@ export default function AdminDashboardPage() {
                 Dashboard Overview
               </h1>
               <Badge variant="secondary" className="hidden sm:inline-flex">
-                Admin
+                {role === UserRole.MANAGER ? "Manager" : "Admin"}
               </Badge>
             </div>
 

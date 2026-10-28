@@ -18,7 +18,7 @@ export default function RegisterForm() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { mutate: register, isPending: registerPedding } = useRegister();
+  const { mutate: register } = useRegister();
 
   const form = useForm({
     defaultValues: {

@@ -70,7 +70,7 @@ function WorkOrderActions({ order }: { order: WorkOrder }) {
         </div>
       </DialogContent>
     </Dialog>
-    <CreateInvoiceDialog open={createInvoiceOpen} onOpenChange={setCreateInvoiceOpen} workOrder={order} />
+    {createInvoiceOpen && <CreateInvoiceDialog open onOpenChange={setCreateInvoiceOpen} workOrder={order} />}
   </div>;
 }
 

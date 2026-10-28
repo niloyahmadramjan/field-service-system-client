@@ -1,6 +1,4 @@
 import { ServiceList } from "@/components/service/service-list";
-import { Badge } from "@/components/ui/badge";
-import { Sparkles } from "lucide-react";
 
 export default function ServicesPage() {
   return (

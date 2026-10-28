@@ -6,7 +6,6 @@ import type { ReactNode } from "react";
 import {
   Activity,
   BriefcaseBusiness,
-  CalendarDays,
   ClipboardList,
   FileChartColumn,
   LayoutDashboard,

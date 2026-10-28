@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Eye, LoaderCircle, MoreHorizontal, SearchX, ShieldCheck, Trash2, UserRound, X } from "lucide-react";
+import { Check, Eye, LoaderCircle, MoreHorizontal, SearchX, Trash2, UserRound, X } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

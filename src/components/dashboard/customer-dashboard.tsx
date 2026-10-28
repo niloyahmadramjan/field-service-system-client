@@ -197,7 +197,7 @@ export function CustomerDashboard() {
           </div>
         )}
 
-        {/* <section className="grid gap-5 lg:grid-cols-[1.5fr_1fr]">
+        <section className="grid gap-5 lg:grid-cols-[1.5fr_1fr]">
           <Card className="overflow-hidden">
             <div className="h-2 bg-gradient-to-r from-primary via-primary/70 to-sky-400" />
             <CardHeader className="flex flex-row items-center justify-between gap-4">
@@ -310,7 +310,7 @@ export function CustomerDashboard() {
               </CardContent>
             </Card>
           </div>
-        </section> */}
+        </section>
       </div>
     </main>
   );

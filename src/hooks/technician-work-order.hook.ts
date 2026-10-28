@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { getMyWorkOrder, getMyWorkOrders } from "@/api/technician-work-order.api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getMyWorkOrder, getMyWorkOrders, updateMyWorkOrderStatus } from "@/api/technician-work-order.api";
 import type { TechnicianWorkOrderListParams } from "@/types/technician-work-order.types";
+import type { WorkOrderStatus } from "@/types/work-order.types";
 
 export const technicianWorkOrderKeys = {
   all: ["technician", "work-orders"] as const,
@@ -20,5 +21,19 @@ export function useMyWorkOrder(workOrderId: string) {
     queryKey: technicianWorkOrderKeys.detail(workOrderId),
     queryFn: () => getMyWorkOrder(workOrderId),
     enabled: Boolean(workOrderId),
+  });
+}
+
+export function useUpdateMyWorkOrderStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ workOrderId, status }: { workOrderId: string; status: WorkOrderStatus }) =>
+      updateMyWorkOrderStatus(workOrderId, { status }),
+    onSuccess: async (_response, { workOrderId }) => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: technicianWorkOrderKeys.all }),
+        queryClient.invalidateQueries({ queryKey: technicianWorkOrderKeys.detail(workOrderId) }),
+      ]);
+    },
   });
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -25,12 +25,6 @@ export default function CreateInvoiceDialog({
 }) {
   const [dueDate, setDueDate] = useState("");
   const create = useCreateInvoice();
-
-  useEffect(() => {
-    if (open) {
-      setDueDate("");
-    }
-  }, [open, workOrder.id]);
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

@@ -87,6 +87,6 @@ export default function ServiceTable({ filter, search }: { filter: ServiceFilter
     </TableBody></Table></div>
     {!query.isError && meta && <RequestPagination page={page} pageSize={PAGE_SIZE} total={meta.total} totalPages={Math.max(meta.totalPages, 1)} onPageChange={setPage} onPageSizeChange={() => setPage(1)} />}
     <ServiceDetailsDialog serviceId={detailsId} onClose={() => setDetailsId(null)} />
-    <ServiceFormDialog open={Boolean(selectedService)} onOpenChange={(open) => !open && setSelectedService(null)} service={selectedService} />
+    {selectedService && <ServiceFormDialog key={selectedService.id} open onOpenChange={(open) => !open && setSelectedService(null)} service={selectedService} />}
   </div>;
 }

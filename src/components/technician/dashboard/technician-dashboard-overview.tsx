@@ -39,6 +39,14 @@ const metrics = [
     color: "text-amber-600 bg-amber-500/10",
   },
   {
+    key: "todaysVisits",
+    label: "Today’s visits",
+    description: "Visits scheduled for today",
+    href: "/technician/schedule",
+    icon: CalendarDays,
+    color: "text-violet-600 bg-violet-500/10",
+  },
+  {
     key: "completedWorkOrders",
     label: "Completed work orders",
     description: "Work orders marked complete",
