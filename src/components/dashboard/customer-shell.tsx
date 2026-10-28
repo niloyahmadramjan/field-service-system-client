@@ -184,7 +184,7 @@ export function CustomerShell({ children }: { children: ReactNode }) {
           <Suspense fallback={<div className="h-64" />}>
             <NavLinks />
           </Suspense>
-          <div className="mt-8 rounded-xl border bg-gradient-to-br from-primary/10 to-background p-4">
+          <div className="mt-8 rounded-xl border bg-linear-to-br from-primary/10 to-background p-4">
             <p className="text-sm font-semibold">Need a service?</p>
             <p className="mt-1 text-xs leading-5 text-muted-foreground">
               Browse available services and request a visit.
